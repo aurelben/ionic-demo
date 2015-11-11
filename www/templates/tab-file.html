@@ -1,0 +1,19 @@
+<ion-view view-title="List all App Files">
+  <ion-content class="padding">
+    <div class="list card" ng-repeat="item in filesList">
+      <div class="item item-divider">Name is / {{item.name}}</div>
+      <div class="item item-body">
+      <div>
+          Size: {{item.size}}
+          Last Modified: {{item.lastmodified}}
+          Other Info: {{item.other}}
+        </div>
+        <div>
+          <a ui-sref="file.read({ id: item.id })"> 
+           <button>{{ item.name }}</button>
+          </a>
+        </div>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>
