@@ -1,45 +1,37 @@
 angular.module('starter.services', [])
 
-.factory('Scan', function($ionicPlatform, $cordovaFile) {
+.factory('Scan', function($ionicPlatform, $cordovaFile, $q) {
   // Might use a resource here that returns a JSON array
-  var filesList = [{}];
-  $ionicPlatform.ready(function(filesList) {
-    console.log(cordova.file.dataDirectory);
-    $cordovaFile.checkDir(cordova.file.dataDirectory, "./")
-        .then(function (success) {
-          function succ(entries, filesList) {
-              var i;
-              var res = [{}];
-              for (i=0; i<entries.length; i++) {
-                if(entries[i].isFile) {
-                  res.push(entries[i]);
-                  console.log("list", entries[i].name);
-                  for (z in entries[i]) {
-                    console.log("z is:", z, "val is:", entries[i][z]);
-                  }
-                }
-              }
-              return(res);
-          }
-
-          function fail(error) {
-              alert("Failed to list directory contents: " + error.code);
-          }
-
-          // Get a directory reader
-          var directoryReader = success.createReader();
-
-          // Get a list of all the entries in the directory
-          filesList = directoryReader.readEntries(succ,fail);
-          
-        }, function (error) {
-          filesList = error;
-        });
-   });
+  var helper = MyNamespace.helpers;
   return {
-    all: function() {
-      return filesList;
+    all: function(path) {
+      array_path = [path, "cordova.file.dataDirectory"];
+      var myRes = helper.cordovaCheckDir(array_path, cordova, $q, $cordovaFile, $ionicPlatform);
+      return myRes;
     },
+    remove: function(file) {
+      filesList.splice(filesList.indexOf(file), 1);
+    },
+    get: function(fileId) {
+      for (var i = 0; i < filesList.length; i++) {
+        if (filesList[i].id === parseInt(fileId)) {
+          return filesList[i];
+        }
+      }
+      return null;
+    }
+  };
+})
+
+.factory('Import', function($ionicPlatform, $cordovaFile, $q) {
+  // Might use a resource here that returns a JSON array
+  var helper = MyNamespace.helpers;
+    return {
+      all: function(path) {
+        array_path = [path, "cordova.file.externalRootDirectory"];
+        var myRes = helper.cordovaCheckDir(array_path, cordova, $q, $cordovaFile, $ionicPlatform);
+        return myRes;
+      },
     remove: function(file) {
       filesList.splice(filesList.indexOf(file), 1);
     },
@@ -102,3 +94,4 @@ angular.module('starter.services', [])
     }
   };
 });
+

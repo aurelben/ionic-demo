@@ -3,20 +3,41 @@ angular.module('starter.controllers', [])
 .controller('DashCtrl', function($scope) {})
 
 .controller('ListAppDirCtrl', function($scope, $cordovaFile, Scan) {
-    $scope.filesList = Scan.all();
-    
+    myRes = Scan.all("./");
+    myRes.then(function (success){
+      $scope.filesList = success;
+      var helper = MyNamespace.helpers;
+      helper.my_dump($scope.filesList[0]);
+      }, function(error) {
+        $scope.filesList = error;
+      })
+   
     $scope.fileRemove = function(f_id) {
       Scan.remove(f_id);
     };
 })
 
-.controller('ListDlDirCtrl', function($scope, $cordovaFile, Scan) {})
+.controller('ListDlDirCtrl', function($scope, $cordovaFile, Import) {
+  myRes = Import.all("./Download");
+  myRes.then(function (success){
+    $scope.filesList = success;
+    var helper = MyNamespace.helpers;
+    helper.my_dump($scope.filesList);
+    }, function(error) {
+      $scope.filesList = error;
+    })    
+  $scope.fileRemove = function(f_id) {
+      Scan.remove(f_id);
+    };
+})
 
 .controller('FromDlToAppCtrl', function($scope, $cordovaFile, Scan) {})
 
 .controller('DelFileCtrl', function($scope, $cordovaFile, Scan) {})
 
 .controller('ReadFileCtrl', function($scope, $cordovaFile, $stateParams, Scan) {})
+
+.controller('AddfileCtrl', function($scope, $cordovaFile, $stateParams, Scan) {})
 
 .controller('UploadCtrl', function($scope, $cordovaFile, $cordovaFileTransfer) {
   var directory = cordova.file.dataDirectory;
