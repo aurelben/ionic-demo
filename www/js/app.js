@@ -1,6 +1,6 @@
-var MyNamespace = MyNamespace || {};
+var Cordohelper = Cordohelper || {};
 
- MyNamespace.helpers = {
+ Cordohelper.helpers = {
    isNotString: function(str) {
      return (typeof str !== "string");
    },
@@ -36,17 +36,23 @@ var MyNamespace = MyNamespace || {};
          console.log(syspath);
          $cordovaFile.checkDir(eval(syspath), path)
          .then(function (success) {
-           console.log("in then");
-           function succ(entries) {
-             deferred.notify('checkin App Dir');
-             deferred.resolve(entries);
-                 //return(res);
-               }
+           console.log("in cordovaCheckDir then");
+             
+             /**
+              * [succ description]
+              * @param  {[type]} entries [description]
+              * @return {[type]}         [description]
+              */
+             function succ(entries) {
+               deferred.notify('checkin App Dir');
+               deferred.resolve(entries);
+                   //return(res);
+                 }
 
-               function fail(error) {
-                 deferred.reject(error.code);
-                 //alert("Failed to list directory contents: " + error.code);
-               }
+             function fail(error) {
+                   deferred.reject(error.code);
+                   //alert("Failed to list directory contents: " + error.code);
+              }
 
              // Get a directory reader
              var directoryReader = success.createReader();
@@ -63,6 +69,180 @@ var MyNamespace = MyNamespace || {};
      
    },
 
+   /**
+    * [cordovaReadFile get promise from $cordovaFile.ReadFileAsText ]
+    * @param  {[array]} array_path [exemple: array_path = ["./", "cordova.file.dataDirectory"];]
+    * @param  {[object]} cordova [the cordova object]
+    * @param  {[object]} $q [the $q.defer() object]
+    * @return {[promise]} return promise from []
+    */
+   cordovaReadFile: function(array_path, cordova, $q, $cordovaFile, $ionicPlatform) {
+       //console.log(sys);
+       var path = array_path[0];
+       var syspath = array_path[1];
+       var deferred = $q.defer();
+       $ionicPlatform.ready(function() {
+         
+         console.log("cordovaReadFile generic function");    
+         console.debug(syspath);
+         console.debug(path);
+         console.debug($cordovaFile);
+         $cordovaFile.readAsText(eval(syspath), path)
+         .then(function (success) {
+           console.log("in ReadFile then");
+           function succ(entries) {
+             deferred.notify('Reading file as text');
+             deferred.resolve(entries);
+                 //return(res);
+               }
+
+               function fail(error) {
+                 deferred.reject(error.code);
+                 alert("Failed to reead file: " + error.code);
+               }
+
+             // create corova file reader
+             var fileReader = success.createReader();
+
+             // use reader to return promise contening file as str var
+             filesList = fileReader.readEntries(succ,fail);
+             return deferred.promise;
+           }, function (error) {
+             deferred.reject(error.code);
+             alert("Failed to read file: " + error.code);
+           });
+         
+       });
+     return deferred.promise;
+     
+   },
+
+   /**
+    * [cordovaMvFile get promise from $cordovaFile.moveFile ]
+    * @param  {[array]} array_path [exemple: array_path = ["./", "cordova.file.dataDirectory"];]
+    * @param  {[object]} cordova [the cordova object]
+    * @param  {[object]} $q [the $q.defer() object]
+    * @return {[promise]} return promise from []
+    */
+   cordovaMvFile: function(array_path, cordova, $q, $cordovaFile, $ionicPlatform) {
+       /**
+        * [path is the name of file as str var]
+        * @type {[str]}
+        */
+       var path = array_path[0];
+       /**
+        * [syspath is cordova actual FS]
+        * @type {Object}
+        */
+       var syspath = array_path[1];
+       /**
+        * [tempsyspath is cordova file destination FS]
+        * @type {Object}
+        */
+       var tempsyspath = array_path[2];
+       /**
+        * [deferred is Q object for returning promise]
+        * @type {Object}
+        */
+       var deferred = $q.defer();
+
+       $ionicPlatform.ready(function() {
+         console.log("cordovaMvFile generic function");
+         console.debug(path);   
+         console.debug(syspath);
+         console.debug(tempsyspath);
+         $cordovaFile.copyFile(eval(syspath), path, eval(tempsyspath))
+         .then(function (success) {
+           console.log("in cordovaFile.moveFile then", success);
+           function succ(entries) {
+             deferred.notify('cordovaFile.moveFile success');
+             deferred.resolve(entries);
+                 //return(res);
+               }
+
+               function fail(error) {
+                 deferred.reject(error.code);
+                 alert("Failed to Mv file: " + error.code);
+               }
+
+             // create corova file reader
+             var fileReader = success.createReader();
+
+             // use reader to return promise contening file as str var
+             filesList = fileReader.readEntries(succ,fail);
+             return deferred.promise;
+           }, function (error) {
+             deferred.reject(error.code);
+             for (x in error){
+                console.debug(x, error[x]);
+             }
+             
+             alert("Failed to cordovaFile.moveFile promise: " + error.message);
+           });
+         
+       });
+     return deferred.promise;
+     
+   },
+
+   /**
+    * [cordovaRmFile get promise from $cordovaFile.removeFile ]
+    * @param  {[array]} array_path [exemple: array_path = ["./", "cordova.file.dataDirectory"];]
+    * @param  {[object]} cordova [the cordova object]
+    * @param  {[object]} $q [the $q.defer() object]
+    * @return {[promise]} return promise from []
+    */
+   cordovaRmFile: function(array_path, cordova, $q, $cordovaFile, $ionicPlatform) {
+       /**
+        * [path is the name of file as str var]
+        * @type {[str]}
+        */
+       var path = array_path[0];
+       /**
+        * [syspath is cordova actual FS]
+        * @type {Object}
+        */
+       var syspath = array_path[1];
+       /**
+        * [deferred is Q object for returning promise]
+        * @type {Object}
+        */
+       var deferred = $q.defer();
+
+       $ionicPlatform.ready(function() {
+         console.log("cordovaRmFile generic function");    
+         console.log(syspath);
+         console.log(tempsyspath);
+         $cordovaFile.removeFile(eval(syspath), path)
+         .then(function (success) {
+           console.log("in Rm file then", success);
+           function succ(entries) {
+             deferred.notify('file is rm');
+             deferred.resolve(entries);
+                 //return(res);
+               }
+
+           function fail(error) {
+              deferred.reject(error.code);
+              alert("Failed to Rm file: " + error.code);
+            }
+
+             // create corova file reader
+             var fileReader = success.createReader();
+
+             // use reader to return promise contening file as str var
+             filesList = fileReader.readEntries(succ,fail);
+             return deferred.promise;
+           }, function (error) {
+             deferred.reject(error.code);
+             alert("Failed to Rm file promise: " + error.code);
+           });
+         
+       });
+     return deferred.promise;
+     
+   },
+
    cordovaCheckFile: function(array_path, cordova, $q, $cordovaFile, $ionicPlatform) {
        //console.log(sys);
        var path = array_path[0];
@@ -72,9 +252,9 @@ var MyNamespace = MyNamespace || {};
          
          console.log("cordovaCheckFile generic function");    
          console.log(syspath);
-         $cordovaFile.checkFile(eval(syspath), path)
+         $cordovaFile.checkDir(eval(syspath), path)
          .then(function (success) {
-           console.log("in then");
+           console.log("in cordovaFile.checkFile then");
            function succ(entries) {
             var fileExtRegex = /\.([0-9a-z]+)(?:[\?#]|$)/i;
              deferred.notify('checkin File');
@@ -152,7 +332,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 
   // Each tab has its own nav history stack:
   .state('tab.file', {
-      url: '/file',
+      url: '/files',
       views: {
         'ListFiles': {
           templateUrl: 'templates/tab-file.html',
@@ -160,11 +340,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         }
       }
     })
-  .state('file.read', {
-      url: '/file/id',
+  .state('tab.file-read', {
+      url: '/file/:fileId',
       views: {
-        'ReadFile': {
-          templateUrl: 'templates/file.read.html',
+        'ListFiles': {
+          templateUrl: 'templates/file-read.html',
           controller: 'ReadFileCtrl'
       }
       }

@@ -4,16 +4,24 @@ angular.module('starter.controllers', [])
 
 .controller('ListAppDirCtrl', function($scope, $cordovaFile, Scan) {
     myRes = Scan.all("./");
+    
     myRes.then(function (success){
       $scope.filesList = success;
-      var helper = MyNamespace.helpers;
-      helper.my_dump($scope.filesList[0]);
-      }, function(error) {
+      var helper = Cordohelper.helpers;
+      //helper.my_dump($scope.filesList[0]);
+    }, function(error) {
         $scope.filesList = error;
-      })
+    })
    
     $scope.fileRemove = function(f_id) {
-      Scan.remove(f_id);
+      rmRes = Scan.remove(f_id);
+      rmRes.then(function (success){
+        $scope.filesList.splice($scope.filesList.indexOf(f_id), 1);
+        var helper = Cordohelper.helpers;
+        //helper.my_dump($scope.filesList);
+      }, function(error) {
+        $scope.myerror = error;
+      })
     };
 })
 
@@ -21,21 +29,47 @@ angular.module('starter.controllers', [])
   myRes = Import.all("./Download");
   myRes.then(function (success){
     $scope.filesList = success;
-    var helper = MyNamespace.helpers;
+    var helper = Cordohelper.helpers;
     helper.my_dump($scope.filesList);
     }, function(error) {
       $scope.filesList = error;
     })    
-  $scope.fileRemove = function(f_id) {
-      Scan.remove(f_id);
+  $scope.move = function(f_id) {
+    var helper = Cordohelper.helpers;
+    helper.my_dump($scope.filesList);
+    for (member in $scope.filesList) {
+      console.debug(member);
+    }
+      mvRes = Import.remove("/Download/"+f_id, $scope.filesList);
+      mvRes.then(function (success){
+        $scope.filesList.splice(scope.filesList.indexOf(f_id), 1);
+        var helper = Cordohelper.helpers;
+        helper.my_dump($scope.filesList);
+      }, function(error) {
+        $scope.myerror = error;
+      })
     };
 })
 
-.controller('FromDlToAppCtrl', function($scope, $cordovaFile, Scan) {})
+.controller('FromDlToAppCtrl', function($scope, $cordovaFile, Scan) {
+})
 
 .controller('DelFileCtrl', function($scope, $cordovaFile, Scan) {})
 
-.controller('ReadFileCtrl', function($scope, $cordovaFile, $stateParams, Scan) {})
+.controller('ReadFileCtrl', function($scope, $cordovaFile, $stateParams, Read) {
+  console.debug("in read file ctrl");
+  file_name = $stateParams.fileId;
+  myRes = Read.all(file_name);
+  console.debug($stateParams.fileId);
+  myRes.then(function (success){
+    $scope.fileAsText = success;
+    var helper = Cordohelper.helpers;
+    helper.my_dump($scope.fileAsText);
+    }, function(error) {
+      $scope.filesList = error;
+    })
+
+})
 
 .controller('AddfileCtrl', function($scope, $cordovaFile, $stateParams, Scan) {})
 

@@ -9,11 +9,28 @@
           Other Info: {{item.other}}
         </div>
         <div>
-          <a ui-sref="file.read({ id: item.id })"> 
-           <button>{{ item.name }}</button>
+        <!-- ui-sref="file-read({ fileId: item.name })" -->
+          <a href="#/tab/file/{{item.name}}"> 
+           <button>Read {{ item.name }}</button>
           </a>
         </div>
       </div>
     </div>
   </ion-content>
 </ion-view>
+
+<!-- <ion-view view-title="Chats">
+  <ion-content>
+    <ion-list>
+      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="item in filesList" type="item-text-wrap" href="#/tab/file/{{item.name}}">
+        <img ng-src="{{chat.face}}">
+        <h2>{{item.name}}</h2>
+        <p>{{item.lastText}}</p>
+        <i class="icon ion-chevron-right icon-accessory"></i>
+        <ion-option-button class="button-assertive" ng-click="remove(item)">
+          Delete
+        </ion-option-button>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view> -->

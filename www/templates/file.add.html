@@ -1,6 +1,6 @@
-<ion-view view-title="ReadFile">
+<ion-view view-title="AddFile">
   <ion-content class="padding">
-    <div class="list card" ng-repeat="item in scope.fileToRead">
+    <div class="list card" ng-repeat="item in filesList">
       <div class="item item-divider">{{item.name}}</div>
       <div class="item item-body">
       <div>
@@ -9,9 +9,7 @@
           Other Info: {{item.other}}
         </div>
         <div>
-          <a ui-sref="file.read({ id: item.id })"> 
-           <button>{{ item.name }}</button>
-          </a>
+           <button ng-click="move(item.name)")>move {{ item.name }}</button>
         </div>
       </div>
     </div>
