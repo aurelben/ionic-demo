@@ -2,8 +2,17 @@ angular.module('starter.controllers', [])
 
 .controller('DashCtrl', function($scope) {})
 
-.controller('ListAppDirCtrl', function($scope, $cordovaFile, Scan) {
+.controller('ListAppDirCtrl', function($scope, $cordovaFile, $ionicPlatform, Scan, $q) {
     myRes = Scan.all("./");
+    var helper = Cordohelper.helpers;
+    var randnbr = Math.floor((Math.random() * 10) + 1);
+    array_path = ["testfile_2.txt", "cordova.file.dataDirectory"];
+    var cretest = helper.cordovaCreateFile(array_path, cordova, $q, $cordovaFile, $ionicPlatform);
+    cretest.then(function (success){
+      alert(success);
+    }, function (error){
+      alert(error);
+    });
     
     myRes.then(function (success){
       $scope.filesList = success;
@@ -11,7 +20,11 @@ angular.module('starter.controllers', [])
       //helper.my_dump($scope.filesList[0]);
     }, function(error) {
         $scope.filesList = error;
-    })
+    });
+
+    $scope.fileCreate = function (file_name) {
+
+    }
    
     $scope.fileRemove = function(f_id) {
       rmRes = Scan.remove(f_id);
@@ -25,22 +38,21 @@ angular.module('starter.controllers', [])
     };
 })
 
+
 .controller('ListDlDirCtrl', function($scope, $cordovaFile, Import) {
   myRes = Import.all("./Download");
   myRes.then(function (success){
     $scope.filesList = success;
     var helper = Cordohelper.helpers;
-    helper.my_dump($scope.filesList);
-    }, function(error) {
-      $scope.filesList = error;
-    })    
-  $scope.move = function(f_id) {
+    helper.my_dump(success);
+
+    $scope.move = function(f_id, success) {
     var helper = Cordohelper.helpers;
     helper.my_dump($scope.filesList);
     for (member in $scope.filesList) {
       console.debug(member);
     }
-      mvRes = Import.remove("/Download/"+f_id, $scope.filesList);
+      mvRes = Import.remove(f_id, success);
       mvRes.then(function (success){
         $scope.filesList.splice(scope.filesList.indexOf(f_id), 1);
         var helper = Cordohelper.helpers;
@@ -49,6 +61,14 @@ angular.module('starter.controllers', [])
         $scope.myerror = error;
       })
     };
+
+
+    var helper = Cordohelper.helpers;
+    helper.my_dump($scope.filesList);
+    }, function(error) {
+      $scope.filesList = error;
+    })    
+  
 })
 
 .controller('FromDlToAppCtrl', function($scope, $cordovaFile, Scan) {

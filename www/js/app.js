@@ -89,24 +89,29 @@ var Cordohelper = Cordohelper || {};
          console.debug($cordovaFile);
          $cordovaFile.readAsText(eval(syspath), path)
          .then(function (success) {
+           
            console.log("in ReadFile then");
-           function succ(entries) {
+           console.debug(success);
+           
+           /*function succ(entries) {
              deferred.notify('Reading file as text');
              deferred.resolve(entries);
                  //return(res);
-               }
+           };
 
-               function fail(error) {
-                 deferred.reject(error.code);
-                 alert("Failed to reead file: " + error.code);
-               }
+           function fail(error) {
+             deferred.reject(error.code);
+             alert("Failed to read file: " + error.code);
+           };
+
+           
 
              // create corova file reader
-             var fileReader = success.createReader();
+          var fileReader = success.createReader();
 
              // use reader to return promise contening file as str var
              filesList = fileReader.readEntries(succ,fail);
-             return deferred.promise;
+             return deferred.promise;*/
            }, function (error) {
              deferred.reject(error.code);
              alert("Failed to read file: " + error.code);
@@ -151,7 +156,7 @@ var Cordohelper = Cordohelper || {};
          console.debug(path);   
          console.debug(syspath);
          console.debug(tempsyspath);
-         $cordovaFile.copyFile(eval(syspath), path, eval(tempsyspath))
+         $cordovaFile.moveFile(eval(syspath), path, eval(tempsyspath))
          .then(function (success) {
            console.log("in cordovaFile.moveFile then", success);
            function succ(entries) {
@@ -177,7 +182,7 @@ var Cordohelper = Cordohelper || {};
                 console.debug(x, error[x]);
              }
              
-             alert("Failed to cordovaFile.moveFile promise: " + error.message);
+             alert("Failed to cordovaFile.moveFile promise: " + error.code);
            });
          
        });
@@ -212,7 +217,7 @@ var Cordohelper = Cordohelper || {};
        $ionicPlatform.ready(function() {
          console.log("cordovaRmFile generic function");    
          console.log(syspath);
-         console.log(tempsyspath);
+         //console.log(tempsyspath);
          $cordovaFile.removeFile(eval(syspath), path)
          .then(function (success) {
            console.log("in Rm file then", success);
@@ -236,6 +241,66 @@ var Cordohelper = Cordohelper || {};
            }, function (error) {
              deferred.reject(error.code);
              alert("Failed to Rm file promise: " + error.code);
+           });
+         
+       });
+     return deferred.promise;
+     
+   },
+
+  /**
+    * [cordovaCreateFile get promise from $cordovaFile.createFile ]
+    * @param  {[array]} array_path [exemple: array_path = ["./", "cordova.file.dataDirectory"];]
+    * @param  {[object]} cordova [the cordova object]
+    * @param  {[object]} $q [the $q.defer() object]
+    * @return {[promise]} return promise from []
+    */
+   cordovaCreateFile: function(array_path, cordova, $q, $cordovaFile, $ionicPlatform) {
+       /**
+        * [path is the name of file as str var]
+        * @type {[str]}
+        */
+       var name = array_path[0];
+       /**
+        * [syspath is cordova actual FS]
+        * @type {Object}
+        */
+       var syspath = array_path[1];
+       /**
+        * [deferred is Q object for returning promise]
+        * @type {Object}
+        */
+       var deferred = $q.defer();
+
+       $ionicPlatform.ready(function() {
+         console.log("cordovaCreateFile generic methode");    
+         console.log(syspath);
+         //console.log(tempsyspath);
+         $cordovaFile.createFile(eval(syspath), name)
+         .then(function (success) {
+           console.log("in create file then", success);
+           console.debug(success);
+           self.helpers.my_dump(success);
+           /*function succ(entries) {
+             deferred.notify('file is created');
+             deferred.resolve(entries);
+                 //return(res);
+               }
+
+           function fail(error) {
+              deferred.reject(error.code);
+              alert("Failed to created file: " + error.code);
+            }
+
+             // create corova file reader
+             var fileReader = success.createReader();
+
+             // use reader to return promise contening file as str var
+             filesList = fileReader.readEntries(succ,fail);
+             return deferred.promise;*/
+           }, function (error) {
+             deferred.reject(error.code);
+             alert("Failed to created file promise: " + error.code);
            });
          
        });
