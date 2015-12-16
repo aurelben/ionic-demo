@@ -1,5 +1,21 @@
 <ion-view view-title="ReadFile">
   <ion-content class="padding">
+  <h2 class="center">File to read</h2>
+
+  <button ng-click="generateGraphs('AIR_TEMPERATURE')">Generate graph AIR_TEMP</button>
+    <button ng-click="generateGraphs('REL_HUMIDITY')">Generate graph REL_HUMIDITY</button>
+    <button ng-click="generateGraphs('AIR_PRESSURE')">Generate graph AIR_PRESSURE</button>
+    <button ng-click="generateGraphs('LOCAL_WS_2MIN_MNM')">Generate graph LOCAL_WS_2MIN_MNM</button>
+
+    <div id="first-graph"></div>
+    <div id="second-graph"></div>
+
+    <div id="windrose" style="display:none">
+        <button ng-click="swapDirections('eight')">8 Directions</button>
+        <button ng-click="swapDirections('sixteen')">16 Directions</button>
+        <button ng-click="swapDirections('thirtyTwo')">32 Directions</button>
+        <div id="third-graph"></div>
+    </div>
   <div>{{item.fileAsText}}</div>
 </ion-content>
 </ion-view>

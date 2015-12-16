@@ -5,16 +5,17 @@ angular.module('starter.controllers', [])
 .controller('ListAppDirCtrl', function($scope, $cordovaFile, $ionicPlatform, Scan, $q) {
     myRes = Scan.all("./");
     var helper = Cordohelper.helpers;
-    var randnbr = Math.floor((Math.random() * 10) + 1);
-    array_path = ["testfile_2.txt", "cordova.file.dataDirectory"];
+    /*var randnbr = Math.floor((Math.random() * 10) + 1);
+    array_path = ["testfile_"+randnbr+".txt", "cordova.file.dataDirectory"];
     var cretest = helper.cordovaCreateFile(array_path, cordova, $q, $cordovaFile, $ionicPlatform);
     cretest.then(function (success){
       alert(success);
     }, function (error){
       alert(error);
-    });
+    });*/
     
     myRes.then(function (success){
+      console.log(angular.toJson(success, true));
       $scope.filesList = success;
       var helper = Cordohelper.helpers;
       //helper.my_dump($scope.filesList[0]);
@@ -42,16 +43,13 @@ angular.module('starter.controllers', [])
 .controller('ListDlDirCtrl', function($scope, $cordovaFile, Import) {
   myRes = Import.all("./Download");
   myRes.then(function (success){
+    console.log(angular.toJson(success, true));
     $scope.filesList = success;
-    var helper = Cordohelper.helpers;
+/*    var helper = Cordohelper.helpers;
     helper.my_dump(success);
-
+*/
     $scope.move = function(f_id, success) {
-    var helper = Cordohelper.helpers;
-    helper.my_dump($scope.filesList);
-    for (member in $scope.filesList) {
-      console.debug(member);
-    }
+      var helper = Cordohelper.helpers;
       mvRes = Import.remove(f_id, success);
       mvRes.then(function (success){
         $scope.filesList.splice(scope.filesList.indexOf(f_id), 1);
@@ -81,6 +79,19 @@ angular.module('starter.controllers', [])
   file_name = $stateParams.fileId;
   myRes = Read.all(file_name);
   console.debug($stateParams.fileId);
+  console.debug(angular.toJson(myRes, true));
+  parse_his_txt(myRes);
+
+  $scope.generateGraphs = function (opt) {
+    table.graphGenerator.generateGraphs(generateGraphs);
+  }
+
+  $scope.swapDirections = function (opt) {
+    table.graphGenerator.swapDirections(opt);
+  }
+
+
+
   myRes.then(function (success){
     $scope.fileAsText = success;
     var helper = Cordohelper.helpers;
