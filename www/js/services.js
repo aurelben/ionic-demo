@@ -60,8 +60,6 @@ angular.module('starter.services', [])
     },
     remove: function(file, dowload_dir) {
       var helper = Cordohelper.helpers;
-      console.debug(dowload_dir);
-      helper.my_dump(dowload_dir);
 
       array_path = [file, "cordova.file.externalRootDirectory", "cordova.file.dataDirectory"];
       var mvRes = helper.cordovaMvFile(array_path, cordova, $q, $cordovaFile, $ionicPlatform);

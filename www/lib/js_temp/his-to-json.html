@@ -1,0 +1,28 @@
+<html>
+    <head>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    </head>
+    <body>
+
+    <button onClick="table.graphGenerator.generateGraphs('AIR_TEMPERATURE')">Generate graph AIR_TEMP</button>
+    <button onClick="table.graphGenerator.generateGraphs('REL_HUMIDITY')">Generate graph REL_HUMIDITY</button>
+    <button onClick="table.graphGenerator.generateGraphs('AIR_PRESSURE')">Generate graph AIR_PRESSURE</button>
+    <button onClick="table.graphGenerator.generateGraphs('LOCAL_WS_2MIN_MNM')">Generate graph LOCAL_WS_2MIN_MNM</button>
+
+    <div id="first-graph"></div>
+    <div id="second-graph"></div>
+
+    <div id="windrose" style="display:none">
+        <button onClick="table.graphGenerator.swapDirections('eight')">8 Directions</button>
+        <button onClick="table.graphGenerator.swapDirections('sixteen')">16 Directions</button>
+        <button onClick="table.graphGenerator.swapDirections('thirtyTwo')">32 Directions</button>
+        <div id="third-graph"></div>
+    </div>
+
+    </body>
+    <script src="/papaparse/papaparse.min.js"></script>
+    <script src="/his-to-json.js"></script>
+    <script src="/highcharts/js/highcharts.js"></script>
+    <script src="/highcharts/js/highcharts-more.js"></script>
+    <script src="/highcharts/js/modules/exporting.js"></script>
+</html>
