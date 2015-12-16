@@ -1,5 +1,3 @@
-var table;
-
 $(function () {
 
 Highcharts.setOptions({
@@ -208,25 +206,30 @@ GraphGenerator.prototype.getHourValues = function(name, items, hour) {
         return element_hour == hour;
     });
 
+    filtered_items = filtered_items.map(function (element) {
+        if (element[1] === null)
+            return [element[0], 0];
+        else
+            return element;
+    });
+
     var min = null;
     for (var x = 0; x < filtered_items.length; x++) {
-        if (filtered_items[x][1] !== null && (min === null || filtered_items[x][1] < min)) {
+        if (min === null || filtered_items[x][1] <= min) {
             min = filtered_items[x][1];
         }
     }
 
     var max = null;
     for (var x = 0; x < filtered_items.length; x++) {
-        if (filtered_items[x][1] !== null && (max === null || filtered_items[x][1] > max)) {
+        if (max === null || filtered_items[x][1] > max) {
             max = filtered_items[x][1];
         }
     }
 
     var total = 0;
     for (var x = 0; x < filtered_items.length; x++) {
-        if (filtered_items[x] !== " ") {
-            total += filtered_items[x][1];
-        }
+        total += filtered_items[x][1];
     }
     var avg = Math.round(total / filtered_items.length);
     return {
@@ -338,6 +341,7 @@ Table.prototype.getMinWsDisplay = function() {
         if ((min === null || this.data[x][name] < min) && this.data[x][name] != " ") {
             min = this.data[x][name];
             associated = this.data[x]['LOCAL_WD_2MIN_MNM'];
+            hour = this.data[x]['CREATEDATE'];
         }
     }
     return [min + "(" + associated + "°)", hour];
@@ -352,6 +356,7 @@ Table.prototype.getMaxWsDisplay = function() {
         if ((max === null || this.data[x][name] > max) && this.data[x][name] != " ") {
             max = this.data[x][name];
             associated = this.data[x]['LOCAL_WD_2MIN_MNM'];
+            hour = this.data[x]['CREATEDATE'];
         }
     }
     return [max + "(" + associated + "°)", hour];
@@ -390,23 +395,4 @@ Table.prototype.createJsonForTable = function() {
 
 Table.prototype.writeTable = function() {
     var items = this.createJsonForTable();
-    console.log(items);
 }
-
-function parse_his_txt(txt) {
-   Papa.parse(txt, {
-       download: true,
-       header: true,
-       dynamicTyping: true,
-       skipEmptyLines: true,
-       complete: function(results) {
-           table = new Table(results['data']);
-           table.writeTable();
-       },
-       beforeFirstChunk: function (chunk) {
-           chunk = chunk.split('\n').slice(1).join('\n');
-           return chunk;
-       }
-   }) 
-}
-

@@ -5,15 +5,7 @@ angular.module('starter.controllers', [])
 .controller('ListAppDirCtrl', function($scope, $cordovaFile, $ionicPlatform, Scan, $q) {
     myRes = Scan.all("./");
     var helper = Cordohelper.helpers;
-    /*var randnbr = Math.floor((Math.random() * 10) + 1);
-    array_path = ["testfile_"+randnbr+".txt", "cordova.file.dataDirectory"];
-    var cretest = helper.cordovaCreateFile(array_path, cordova, $q, $cordovaFile, $ionicPlatform);
-    cretest.then(function (success){
-      alert(success);
-    }, function (error){
-      alert(error);
-    });*/
-    
+
     myRes.then(function (success){
       console.log(angular.toJson(success, true));
       $scope.filesList = success;
@@ -26,7 +18,7 @@ angular.module('starter.controllers', [])
     $scope.fileCreate = function (file_name) {
 
     }
-   
+
     $scope.fileRemove = function(f_id) {
       rmRes = Scan.remove(f_id);
       rmRes.then(function (success){
@@ -45,9 +37,14 @@ angular.module('starter.controllers', [])
   myRes.then(function (success){
     console.log(angular.toJson(success, true));
     $scope.filesList = success;
-/*    var helper = Cordohelper.helpers;
-    helper.my_dump(success);
-*/
+    alert(angular.toJson(success, true));
+    $scope.filesList = $scope.filesList.filter(function (elem) {
+      if (elem.name == "1_ENHANCED_01.his") {
+        alert(elem.name);
+      }
+      alert(elem.name);
+      return (elem.name.split(".")[1] == "his");
+    });
     $scope.move = function(f_id, success) {
       var helper = Cordohelper.helpers;
       mvRes = Import.remove(f_id, success);
@@ -65,8 +62,9 @@ angular.module('starter.controllers', [])
     helper.my_dump($scope.filesList);
     }, function(error) {
       $scope.filesList = error;
-    })    
-  
+      alert(error);
+    })
+
 })
 
 .controller('FromDlToAppCtrl', function($scope, $cordovaFile, Scan) {
@@ -78,27 +76,41 @@ angular.module('starter.controllers', [])
   console.debug("in read file ctrl");
   file_name = $stateParams.fileId;
   myRes = Read.all(file_name);
-  console.debug($stateParams.fileId);
-  console.debug(angular.toJson(myRes, true));
-  parse_his_txt(myRes);
+  alert(myRes.split("\n")[0]);
 
   $scope.generateGraphs = function (opt) {
-    table.graphGenerator.generateGraphs(generateGraphs);
+    $scope.table.graphGenerator.generateGraphs(generateGraphs);
   }
 
   $scope.swapDirections = function (opt) {
-    table.graphGenerator.swapDirections(opt);
+    $scope.table.graphGenerator.swapDirections(opt);
   }
 
-
-
   myRes.then(function (success){
-    $scope.fileAsText = success;
+    alert(success);
+    Papa.parse(success, {
+       header: true,
+       dynamicTyping: true,
+       skipEmptyLines: true,
+       complete: function(results) {
+           $scope.table = new Table(results['data']);
+           $scope.data_table = $scope.table.createJsonForTable();
+       },
+       beforeFirstChunk: function (chunk) {
+           chunk = chunk.split('\n').slice(1).join('\n');
+           return chunk;
+       }
+    });
+
+    /*$scope.fileAsText = success;
     var helper = Cordohelper.helpers;
     helper.my_dump($scope.fileAsText);
     }, function(error) {
       $scope.filesList = error;
-    })
+    })*/
+}, function(error) {
+  alert(error);
+});
 
 })
 
@@ -118,7 +130,7 @@ angular.module('starter.controllers', [])
           return(error);
       });
     }
-    
+
     // Get free disk space in Kb
     if (ready() >= 100) {
 
@@ -139,7 +151,7 @@ angular.module('starter.controllers', [])
           })
         });
     };
-    
+
   });
 //end codova plugin use
 })
@@ -167,4 +179,4 @@ angular.module('starter.controllers', [])
   $scope.settings = {
     enableFriends: true
   };
-});
+})
