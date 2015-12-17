@@ -1,4 +1,4 @@
-angular.module('starter.controllers', [])
+angular.module('starter.controllers', ['ionic'])
 
 .controller('DashCtrl', function($scope) {})
 
@@ -24,7 +24,6 @@ angular.module('starter.controllers', [])
       rmRes.then(function (success){
         $scope.filesList.splice($scope.filesList.indexOf(f_id), 1);
         var helper = Cordohelper.helpers;
-        //helper.my_dump($scope.filesList);
       }, function(error) {
         $scope.myerror = error;
       })
@@ -34,18 +33,16 @@ angular.module('starter.controllers', [])
 
 .controller('ListDlDirCtrl', function($scope, $cordovaFile, $q, $ionicPlatform, Import) {
   var helper = Cordohelper.helpers;
-  //myRes = Import.all("./Download");
   var array_path = ["./Download", "cordova.file.externalRootDirectory"];
   var myRes = helper.cordovaCheckDir(array_path, cordova, $q, $cordovaFile, $ionicPlatform);
   myRes.then(function (success){
     console.debug(angular.toJson(success, true));
     $scope.filesList = success;
-    //alert(angular.toJson(success, true));
     $scope.filesList = $scope.filesList.filter(function (elem) {
       console.debug(elem.name.split(".")[1] == "his");
       return (elem.name.split(".")[1] == "his");
     });
-    
+
     }, function(error) {
       $scope.filesList = error;
       console.debug(angular.toJson(error, true));
@@ -56,7 +53,6 @@ angular.module('starter.controllers', [])
       var helper = Cordohelper.helpers;
       var array_path = [f_id, "cordova.file.externalRootDirectory", "cordova.file.dataDirectory"];
       var mvRes = helper.cordovaMvFile(array_path, cordova, $q, $cordovaFile, $ionicPlatform);
-      //mvRes = Import.remove(f_id, success);
       mvRes.then(function (success){
         $scope.filesList.splice($scope.filesList.indexOf(f_id), 1);
         console.debug(angular.toJson(success, true));
@@ -73,17 +69,22 @@ angular.module('starter.controllers', [])
 
 .controller('DelFileCtrl', function($scope, $cordovaFile, Scan) {})
 
-.controller('ReadFileCtrl', function($scope, $cordovaFile, $stateParams,$q, $ionicPlatform, Read) {
+.controller('ReadFileCtrl', function($scope, $cordovaFile, $stateParams,$q, $ionicPlatform, Read, $ionicLoading) {
   console.debug("in read file ctrl");
   var helper = Cordohelper.helpers;
   file_name = $stateParams.fileId;
-  //myRes = Read.all(file_name);
   array_path = [file_name, "cordova.file.dataDirectory"];
   var myRes = helper.cordovaReadFile(array_path, cordova, $q, $cordovaFile, $ionicPlatform);
-  alert(myRes.split("\n")[0]);
+  $ionicLoading.show({
+    template: 'Chargement...'
+  });
 
   $scope.generateGraphs = function (opt) {
-    $scope.table.graphGenerator.generateGraphs(generateGraphs);
+    $ionicLoading.show({
+      template: 'Chargement...'
+    });
+    $scope.table.graphGenerator.generateGraphs(opt);
+    $ionicLoading.hide();
   }
 
   $scope.swapDirections = function (opt) {
@@ -91,27 +92,22 @@ angular.module('starter.controllers', [])
   }
 
   myRes.then(function (success){
-    alert(success);
     Papa.parse(success, {
        header: true,
        dynamicTyping: true,
        skipEmptyLines: true,
        complete: function(results) {
+        console.debug("in papa");
            $scope.table = new Table(results['data']);
            $scope.data_table = $scope.table.createJsonForTable();
+           $ionicLoading.hide();
+           delete success;
        },
        beforeFirstChunk: function (chunk) {
            chunk = chunk.split('\n').slice(1).join('\n');
            return chunk;
        }
     });
-
-    /*$scope.fileAsText = success;
-    var helper = Cordohelper.helpers;
-    helper.my_dump($scope.fileAsText);
-    }, function(error) {
-      $scope.filesList = error;
-    })*/
 }, function(error) {
   alert(error);
 });

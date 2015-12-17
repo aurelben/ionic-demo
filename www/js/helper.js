@@ -11,7 +11,7 @@ var Cordohelper = Cordohelper || {};
                       console.log(i+":"+v[i]);
                   }
                   break;
-              default: //number, string, boolean, null, undefined 
+              default: //number, string, boolean, null, undefined
                   console.log(typeof v+":"+v);
                   break;
           }
@@ -31,13 +31,13 @@ var Cordohelper = Cordohelper || {};
        var syspath = array_path[1];
        var deferred = $q.defer();
        $ionicPlatform.ready(function() {
-         
-         console.log("cordovaCheckDir generic function");    
+
+         console.log("cordovaCheckDir generic function");
          console.log(syspath);
          $cordovaFile.checkDir(eval(syspath), path)
            .then(function (success) {
              console.log("in cordovaCheckDir then");
-               
+
                /**
                 * [succ description]
                 * @param  {[type]} entries [description]
@@ -63,10 +63,10 @@ var Cordohelper = Cordohelper || {};
              }, function (error) {
                filesList = error;
              });
-         
+
        });
      return deferred.promise;
-     
+
    },
 
    /**
@@ -82,17 +82,18 @@ var Cordohelper = Cordohelper || {};
        var syspath = array_path[1];
        var deferred = $q.defer();
        $ionicPlatform.ready(function() {
-         
-         console.log("cordovaReadFile generic function");    
+
+         console.log("cordovaReadFile generic function");
          console.debug(syspath);
          console.debug(path);
          console.debug($cordovaFile);
          $cordovaFile.readAsText(eval(syspath), path)
          .then(function (success) {
-           
+
            console.log("in ReadFile then");
-           console.debug(success);
-           
+           deferred.resolve(success);
+           return deferred.promise;
+
            /*function succ(entries) {
              deferred.notify('Reading file as text');
              deferred.resolve(entries);
@@ -104,7 +105,7 @@ var Cordohelper = Cordohelper || {};
              alert("Failed to read file: " + error.code);
            };
 
-           
+
 
              // create corova file reader
           var fileReader = success.createReader();
@@ -116,10 +117,10 @@ var Cordohelper = Cordohelper || {};
              deferred.reject(error.code);
              alert("Failed to read file: " + error.code);
            });
-         
+
        });
      return deferred.promise;
-     
+
    },
 
    /**
@@ -153,7 +154,7 @@ var Cordohelper = Cordohelper || {};
 
        $ionicPlatform.ready(function() {
          console.log("cordovaMvFile generic function");
-         console.debug(path);   
+         console.debug(path);
          console.debug(syspath);
          console.debug(tempsyspath);
          //var new_name = path.replace("./Dowload/","");
@@ -180,13 +181,13 @@ var Cordohelper = Cordohelper || {};
            }, function (error) {
              deferred.reject(error.code);
              console.log(angular.toJson(error, true));
-             
+
              alert("Failed to cordovaFile.moveFile promise: " + error.code);
            });
-         
+
        });
      return deferred.promise;
-     
+
    },
 
    /**
@@ -214,7 +215,7 @@ var Cordohelper = Cordohelper || {};
        var deferred = $q.defer();
 
        $ionicPlatform.ready(function() {
-         console.log("cordovaRmFile generic function");    
+         console.log("cordovaRmFile generic function");
          console.log(syspath);
          //console.log(tempsyspath);
          $cordovaFile.removeFile(eval(syspath), path)
@@ -244,7 +245,7 @@ var Cordohelper = Cordohelper || {};
              alert("Failed to Rm file promise: " + error.code);
              return (error);
            });
-         
+
        });
    },
 
@@ -273,7 +274,7 @@ var Cordohelper = Cordohelper || {};
        var deferred = $q.defer();
 
        $ionicPlatform.ready(function() {
-         console.log("cordovaCreateFile generic methode");    
+         console.log("cordovaCreateFile generic methode");
          console.log(syspath);
          //console.log(tempsyspath);
          $cordovaFile.createFile(eval(syspath), name)
@@ -302,10 +303,10 @@ var Cordohelper = Cordohelper || {};
              deferred.reject(error.code);
              alert("Failed to created file promise: " + error.code);
            });
-         
+
        });
      return deferred.promise;
-     
+
    },
 
    cordovaCheckFile: function(array_path, cordova, $q, $cordovaFile, $ionicPlatform) {
@@ -314,8 +315,8 @@ var Cordohelper = Cordohelper || {};
        var syspath = array_path[1];
        var deferred = $q.defer();
        $ionicPlatform.ready(function() {
-         
-         console.log("cordovaCheckFile generic function");    
+
+         console.log("cordovaCheckFile generic function");
          console.log(syspath);
          $cordovaFile.checkDir(eval(syspath), path)
          .then(function (success) {
@@ -346,9 +347,9 @@ var Cordohelper = Cordohelper || {};
            }, function (error) {
              filesList = error;
            });
-         
+
        });
      return deferred.promise;
-     
-   } 
+
+   }
  };
