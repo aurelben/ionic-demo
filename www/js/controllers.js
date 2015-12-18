@@ -26,10 +26,14 @@ angular.module('starter.controllers', ['ionic'])
     $scope.rmFile = function(f_id) {
       var array_path = [f_id, "cordova.file.dataDirectory"];
       var rmRes = helper.cordovaRmFile(array_path, cordova, $q, $cordovaFile, $ionicPlatform);
+      var to_del = findObjectIndex($scope.filesList, "name", f_id);
+      $scope.filesList.splice($scope.filesList.indexOf(to_del), 1);
 
       rmRes.then(function (success){
         console.log("rm res value", angular.toJson(success, true));
         var to_del = findObjectIndex($scope.filesList, "name", success.name);
+        console.log("to del val", to_del);
+        console.log("filesList val",$scope.filesList);
         $scope.filesList.splice($scope.filesList.indexOf(to_del), 1);
         console.debug(angular.toJson(success, true));
       }, function(error) {
@@ -91,7 +95,9 @@ angular.module('starter.controllers', ['ionic'])
       var helper = Cordohelper.helpers;
       var array_path = [f_id, "cordova.file.externalRootDirectory", "cordova.file.dataDirectory"];
       var mvRes = helper.cordovaMvFile(array_path, cordova, $q, $cordovaFile, $ionicPlatform);
-      // console.log("move res value", angular.toJson(mvRes, true));
+      var to_del = findObjectIndex($scope.filesList, "name", f_id);
+      $scope.filesList.splice($scope.filesList.indexOf(to_del), 1);
+      console.log("move res value", angular.toJson(mvRes, true));
       // if(mvRes['isFile']) {
       //   var to_del = findObjectIndex($scope.filesList, "name", mvRes.name);
       //   console.log("to del", to_del);

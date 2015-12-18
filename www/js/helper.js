@@ -200,6 +200,7 @@ var Cordohelper = Cordohelper || {};
          //console.log(tempsyspath); 
          $cordovaFile.removeFile(eval(syspath), path)
          .then(function (success) {
+          var deferred = $q.defer();
            console.log("in Rm file then", angular.toJson(success, true));
            deferred.resolve(success);
            return deferred.promise;
