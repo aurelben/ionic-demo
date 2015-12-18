@@ -11,7 +11,8 @@ Uploader un fichier :
 ---------------------
 
 Rendez vous dans l'onglet `Upload his file`
-Ensuite il vous suffir d'appuyer sur le bouton `move <nom_du_ficher>` du fichier voulu afin de le transferer dans l'application
+Ensuite il vous suffir d'appuyer sur le bouton `move <nom_du_ficher>` du fichier voulu afin de le transferer dans l'application.
+Le fichier va disparaitre de la liste et vous le retrouverez dans l'onglet `Files list`
 
 Exploitation des fichiers importes
 ----------------------------------
