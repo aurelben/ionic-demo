@@ -146,48 +146,22 @@ var Cordohelper = Cordohelper || {};
         * @type {Object}
         */
        var tempsyspath = array_path[2];
-       /**
-        * [deferred is Q object for returning promise]
-        * @type {Object}
-        */
-       var deferred = $q.defer();
 
        $ionicPlatform.ready(function() {
          console.log("cordovaMvFile generic function");
-         console.debug(path);
-         console.debug(syspath);
-         console.debug(tempsyspath);
          //var new_name = path.replace("./Dowload/","");
-         $cordovaFile.moveFile(eval(syspath), "/./Download/"+path, eval(tempsyspath), path)
+         $cordovaFile.moveFile(eval(syspath), "./Download/"+path, eval(tempsyspath), path)
          .then(function (success) {
-           console.log("in cordovaFile.moveFile then", success);
-           function succ(entries) {
-             deferred.notify('cordovaFile.moveFile success');
-             deferred.resolve(entries);
-                 //return(res);
-               }
-
-               function fail(error) {
-                 deferred.reject(error.code);
-                 alert("Failed to Mv file: " + error.code);
-               }
-
-             // create corova file reader
-             var fileReader = success.createReader();
-
-             // use reader to return promise contening file as str var
-             filesList = fileReader.readEntries(succ,fail);
-             return deferred.promise;
+           console.log("in cordovaFile.moveFile then", angular.toJson(success, true));
+           return (success);
+           
            }, function (error) {
-             deferred.reject(error.code);
              console.log(angular.toJson(error, true));
-
-             alert("Failed to cordovaFile.moveFile promise: " + error.code);
+             alert("Failed to cordovaFile.moveFile promise: " + angular.toJson(error));
+             return (error);
            });
 
        });
-     return deferred.promise;
-
    },
 
    /**
@@ -217,31 +191,13 @@ var Cordohelper = Cordohelper || {};
        $ionicPlatform.ready(function() {
          console.log("cordovaRmFile generic function");
          console.log(syspath);
-         //console.log(tempsyspath);
+         //console.log(tempsyspath); 
          $cordovaFile.removeFile(eval(syspath), path)
          .then(function (success) {
            console.log("in Rm file then", angular.toJson(success, true));
            return (success);
-           /*function succ(entries) {
-             deferred.notify('file is rm');
-             deferred.resolve(entries);
-                 //return(res);
-               }
-
-           function fail(error) {
-              deferred.reject(error.code);
-              alert("Failed to Rm file: " + error.code);
-            }
-
-             // create corova file reader
-             var fileReader = success.createReader();
-
-             // use reader to return promise contening file as str var
-             filesList = fileReader.readEntries(succ,fail);
-             return deferred.promise;*/
            }, function (error) {
               console.log("in Rm file error", angular.toJson(error, true));
-             //deferred.reject(error.code);
              alert("Failed to Rm file promise: " + error.code);
              return (error);
            });

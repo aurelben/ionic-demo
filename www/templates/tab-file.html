@@ -1,4 +1,4 @@
-<ion-view view-title="List all App Files">
+<ion-view view-title="List all App Files" cache-view="false">
   <ion-content class="padding">
     <div class="list card" ng-repeat="item in filesList">
       <div class="item item-divider">Name is / {{item.name}}</div>
@@ -12,7 +12,9 @@
         <!-- ui-sref="file-read({ fileId: item.name })" -->
           <a href="#/tab/file/{{item.name}}"> 
            <button>Read {{ item.name }}</button>
+
           </a>
+          <button ng-click='rmFile(item.name)'>Delete {{ item.name }}</button>
         </div>
       </div>
     </div>
