@@ -201,7 +201,8 @@ var Cordohelper = Cordohelper || {};
          $cordovaFile.removeFile(eval(syspath), path)
          .then(function (success) {
            console.log("in Rm file then", angular.toJson(success, true));
-           return (success);
+           deferred.resolve(success);
+           return deferred.promise;
            }, function (error) {
               console.log("in Rm file error", angular.toJson(error, true));
              alert("Failed to Rm file promise: " + error.code);

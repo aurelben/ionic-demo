@@ -26,13 +26,23 @@ angular.module('starter.controllers', ['ionic'])
     $scope.rmFile = function(f_id) {
       var array_path = [f_id, "cordova.file.dataDirectory"];
       var rmRes = helper.cordovaRmFile(array_path, cordova, $q, $cordovaFile, $ionicPlatform);
+
+      rmRes.then(function (success){
+        console.log("rm res value", angular.toJson(success, true));
+        var to_del = findObjectIndex($scope.filesList, "name", success.name);
+        $scope.filesList.splice($scope.filesList.indexOf(to_del), 1);
+        console.debug(angular.toJson(success, true));
+      }, function(error) {
+        console.debug(angular.toJson(error, true));
+        $scope.myerror = error;
+      })
       console.log("log rmRes in ctrl", angular.toJson(rmRes, true));
 
-      if (rmRes['success']) {
-        $scope.filesList.splice($scope.filesList.indexOf(f_id), 1);
-      } else {
-        alert("can't remove file");
-      }
+      // if (rmRes['success']) {
+      //   $scope.filesList.splice($scope.filesList.indexOf(f_id), 1);
+      // } else {
+      //   alert("can't remove file");
+      // }
       //alert(rmRes);
       // rmRes.then(function (success){
       //   $scope.filesList.splice($scope.filesList.indexOf(f_id), 1);
