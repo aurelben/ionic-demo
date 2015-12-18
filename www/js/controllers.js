@@ -80,11 +80,7 @@ angular.module('starter.controllers', ['ionic'])
   });
 
   $scope.generateGraphs = function (opt) {
-    $ionicLoading.show({
-      template: 'Chargement...'
-    });
     $scope.table.graphGenerator.generateGraphs(opt);
-    $ionicLoading.hide();
   }
 
   $scope.swapDirections = function (opt) {
