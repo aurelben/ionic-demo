@@ -81,18 +81,20 @@ angular.module('starter.controllers', ['ionic'])
       var helper = Cordohelper.helpers;
       var array_path = [f_id, "cordova.file.externalRootDirectory", "cordova.file.dataDirectory"];
       var mvRes = helper.cordovaMvFile(array_path, cordova, $q, $cordovaFile, $ionicPlatform);
-      console.log(angular.toJson(mvRes, true));
-      if(mvRes.isFile) {
-        var to_del = findObjectIndex($scope.filesList, "name", mvRes.name);
-        console.log("to del", to_del);
-      }
-      // mvRes.then(function (success){
-      //   $scope.filesList.splice($scope.filesList.indexOf(f_id), 1);
-      //   console.debug(angular.toJson(success, true));
-      // }, function(error) {
-      //   console.debug(angular.toJson(error, true));
-      //   $scope.myerror = error;
-      // })
+      // console.log("move res value", angular.toJson(mvRes, true));
+      // if(mvRes['isFile']) {
+      //   var to_del = findObjectIndex($scope.filesList, "name", mvRes.name);
+      //   console.log("to del", to_del);
+      // }
+      mvRes.then(function (success){
+        console.log("move res value", angular.toJson(success, true));
+        var to_del = findObjectIndex($scope.filesList, "name", success.name);
+        $scope.filesList.splice($scope.filesList.indexOf(to_del), 1);
+        console.debug(angular.toJson(success, true));
+      }, function(error) {
+        console.debug(angular.toJson(error, true));
+        $scope.myerror = error;
+      })
     };
 
 })

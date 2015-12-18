@@ -149,11 +149,17 @@ var Cordohelper = Cordohelper || {};
 
        $ionicPlatform.ready(function() {
          console.log("cordovaMvFile generic function");
+         var deferred = $q.defer();
          //var new_name = path.replace("./Dowload/","");
          $cordovaFile.moveFile(eval(syspath), "./Download/"+path, eval(tempsyspath), path)
          .then(function (success) {
-           console.log("in cordovaFile.moveFile then", angular.toJson(success, true));
-           return (success);
+          console.log("in cordovaFile.moveFile then", angular.toJson(success, true));
+
+           deferred.resolve(success);
+
+           return deferred.promise;
+           
+           //return (success);
            
            }, function (error) {
              console.log(angular.toJson(error, true));
