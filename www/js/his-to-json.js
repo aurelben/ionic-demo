@@ -294,7 +294,18 @@ GraphGenerator.prototype.getFullData = function(name) {
 function Table(data) {
     this.data = data;
     this.columns = ['AIR_TEMPERATURE', 'REL_HUMIDITY', 'AIR_PRESSURE'];
+    this.used_columns = ['AIR_TEMPERATURE', 'REL_HUMIDITY', 'AIR_PRESSURE', 'CREATEDATE', 'LOCAL_WD_2MIN_MNM',
+    'LOCAL_WS_2MIN_MNM'];
     this.graphGenerator = new GraphGenerator(this.data);
+
+    // clean unused columns here for less memory usage
+    for (var i = 0; i < this.data.length; i++) {
+        for (var key in this.data[i]) {
+            if (this.used_columns.indexOf(key) == -1) {
+                delete this.data[i][key];
+            }
+        }
+    }
 }
 
 Table.prototype.getMin = function(name) {
