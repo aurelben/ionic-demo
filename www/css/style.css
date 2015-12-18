@@ -1,4 +1,18 @@
 /* Empty. Add your own CSS if you like */
 .center {
-	text-align: center; 
+	text-align: center;
+}
+
+
+div.header div.col {
+    background-color: #87CEFA;
+    font-size: bold;
+}
+
+.col {
+    border: 1px solid black;
+}
+
+.row {
+    background: white;
 }
